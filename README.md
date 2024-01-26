@@ -1,2 +1,2 @@
-# golang-course-udemy
+# golang-course
 Golang study projects
