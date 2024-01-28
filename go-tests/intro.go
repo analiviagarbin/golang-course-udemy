@@ -1,9 +1,9 @@
 package main
 
-import {
+import (
 	"fmt"
 	"go-tests/adress"
-}
+)
 
 func main() {
 	typeAdress := adress.AdressType("Rua 15")

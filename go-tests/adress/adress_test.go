@@ -4,7 +4,7 @@ package adress
 import "testing"
 
 type testingScenario struct {
-	adressFunc string,
+	adressFunc string;
 	adressExpected string
 }
 
@@ -13,10 +13,11 @@ func TestAdressType(t *testing.T) {
 	testingScenarios := []testingScenario {
 		{"Rua ABC", "Rua"},
 		{"Avenida Paulista", "Avenida"},
-		{"Quadra 08", "Quadra"}
+		{"Quadra 08", "Quadra"},
+		{"", "Invalid Type"},
 	}
 
-	for _, typeExpected range testingScenarios {
+	for _, typeExpected := range testingScenarios {
 		typeFunc := AdressType(typeExpected.adressFunc)
 		if typeFunc != typeExpected.adressExpected {
 			t.Error("Invalid response")

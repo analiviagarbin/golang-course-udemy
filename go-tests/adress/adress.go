@@ -4,14 +4,14 @@ import "strings"
 
 // AdressType validates the entered address
 func AdressType(adress string) string {
-	validTypes := []string("rua", "avenida", "quadra")
+	validTypes := []string{"rua", "avenida", "quadra"}
 	convertString := strings.ToLower(adress)
 
-	fstWord := strings.Split(adress, " ")[0]
+	fstWord := strings.Split(convertString, " ")[0]
 	adressHasValidType := false
 
-	for _, type := range validTypes {
-		if type == fstWord{
+	for _, Ftype := range validTypes {
+		if Ftype == fstWord{
 			adressHasValidType = true
 		}
 	}
