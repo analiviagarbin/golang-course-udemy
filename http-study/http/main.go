@@ -1,20 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"html/template"
 	"log"
 	"net/http"
-	"html/template"
-	"fmt"
 )
 
 var templates *template.Template
 
 type usr struct {
-	Name string
+	Name  string
 	Email string
 }
 
-func home(w http.ResponseWriter, r *http.Request){
+func home(w http.ResponseWriter, r *http.Request) {
 	// r - request
 	// w - response
 	// w.Write([]byte("Hello World!"))
@@ -26,14 +26,14 @@ func home(w http.ResponseWriter, r *http.Request){
 	templates.ExecuteTemplate(w, "home.html", u)
 }
 
-func user(w http.ResponseWriter, r *http.Request){
+func user(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Users"))
 }
 
 func main() {
 	// html pages
 	templates = template.Must(template.ParseGlob("*.html"))
-	
+
 	// routes
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/users", user)
