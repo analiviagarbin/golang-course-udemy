@@ -138,7 +138,76 @@ func SearchUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // UpdateUser updates an existing user
-func UpdateUser(w http.ResponseWriter, r *http.Request) {}
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+	ID, err := strconv.ParseUint(parameters["id"], 10, 32)
+	if err != nil {
+		w.Write([]byte("Error converting parameter ID to integer"))
+		return
+	}
+
+	bodyRequest, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		w.Write([]byte("Failed to read the request body"))
+		return
+	}
+
+	var user user
+
+	if err = json.Unmarshal(bodyRequest, &user); err != nil {
+		w.Write([]byte("Error converting user to struct"))
+		return
+	}
+
+	db, err := db.Connection()
+	if err != nil {
+		w.Write([]byte("Error connecting to the database"))
+		return
+	}
+	defer db.Close()
+
+	statement, err := db.Prepare("update users set name = ?, email = ? where id = ?")
+	if err != nil {
+		w.Write([]byte("Error creating statement"))
+		return
+	}
+	defer statement.Close()
+
+	if _, err := statement.Exec(user.Name, user.Email, ID); err != nil {
+		w.Write([]byte("Error updating user"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
 
 // DeleteUser deletes an existing user
-func DeleteUser(w http.ResponseWriter, r *http.Request) {}
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+	ID, err := strconv.ParseUint(parameters["id"], 10, 32)
+	if err != nil {
+		w.Write([]byte("Error converting parameter ID to integer"))
+		return
+	}
+
+	db, err := db.Connection()
+	if err != nil {
+		w.Write([]byte("Error connecting to the database"))
+		return
+	}
+	defer db.Close()
+
+	statement, err := db.Prepare("delete from users where id = ?")
+	if err != nil {
+		w.Write([]byte("Error creating statement"))
+		return
+	}
+	defer statement.Close()
+
+	if _, err := statement.Exec(ID); err != nil {
+		w.Write([]byte("Error deleting user"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
